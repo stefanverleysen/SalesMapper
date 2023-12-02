@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import './App.css'; // Make sure to adjust the path if needed
-import bannerImage from './banner.png'; // Add the correct path to your banner image
+import './App.css';
+import bannerImage from './banner.png';
 
-import BusinessInfo from './BusinessInfo';
+import BusinessInfo from './BusinessInfo'; // Ensure this is correctly imported
 import Stages from './Stages';
 import KeyActivitiesMilestones from './KeyActivitiesMilestones';
 import Summary from './Summary';
@@ -12,15 +12,14 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            step: 1,
-            businessInfo: { mapName: '', businessName: '', industry: '' },
+            step: 0,
+            businessInfo: { mapType: 'Sales Process', mapName: '' },
             stages: [],
             activities: [],
             milestones: [],
         };
     }
 
-    // Navigation between steps
     nextStep = () => {
         this.setState(prevState => ({ step: prevState.step + 1 }));
     };
@@ -29,7 +28,6 @@ class App extends Component {
         this.setState(prevState => ({ step: prevState.step - 1 }));
     };
 
-    // Handlers for business info
     handleBusinessInfoChange = (e) => {
         this.setState({
             businessInfo: {
@@ -39,7 +37,6 @@ class App extends Component {
         });
     };
 
-    // Handlers for stages
     handleStageChange = (newStages) => {
         this.setState({ stages: newStages });
     };
@@ -54,7 +51,6 @@ class App extends Component {
         this.setState({ stages: updatedStages });
     };
 
-    // Handlers for activities and milestones
     handleActivitiesChange = (newActivities) => {
         this.setState({ activities: newActivities });
     };
@@ -63,14 +59,11 @@ class App extends Component {
         this.setState({ milestones: newMilestones });
     };
 
-    // Drag and drop handler for Kanban board and Stages
     onDragEnd = (result) => {
         const { destination, source, draggableId, type } = result;
 
-        // If dropped outside the list
         if (!destination) return;
 
-        // If dropped in the same place
         if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
         if (type === 'stage') {
@@ -82,34 +75,42 @@ class App extends Component {
 
             this.setState({ stages: newStages });
         }
-        // Add similar logic for 'activity' and 'milestone' if needed
+        // Add logic for 'activity' and 'milestone' if needed
     };
+
+    renderWelcomeScreen = () => {
+        return (
+            <div className="App">
+                <img src={bannerImage} alt="Banner" className="App-logo" />
+                <div className="App-header">
+                    <h1>Welcome to Automated Sales Mapper</h1>
+                    <p>Follow these steps to map your sales process:</p>
+                    <ul>
+                        <li>Step 1: Provide business information.</li>
+                        <li>Step 2: Define sales process stages.</li>
+                        <li>Step 3: Add key activities and milestones.</li>
+                        <li>Step 4: Review your sales process.</li>
+                        <li>Step 5: Organize your sales process on the Kanban board.</li>
+                    </ul>
+                    <button onClick={this.nextStep}>START MAPPING</button>
+                </div>
+            </div>
+        );
+    }
 
     render() {
         const { step, businessInfo, stages, activities, milestones } = this.state;
 
         switch (step) {
+            case 0:
+                return this.renderWelcomeScreen();
             case 1:
                 return (
-                    <div className="App">
-                        <img src={bannerImage} alt="Banner" className="App-logo" />
-                        <div className="App-header">
-                            <h1>Welcome to Automated Sales Mapper</h1>
-                            <p>Follow these steps to map your sales process:</p>
-                            <ul>
-                                <li>Step 1: Provide business information.</li>
-                                <li>Step 2: Define sales process stages.</li>
-                                <li>Step 3: Add key activities and milestones.</li>
-                                <li>Step 4: Review your sales process.</li>
-                                <li>Step 5: Organize your sales process on the Kanban board.</li>
-                            </ul>
-                        </div>
-                        <BusinessInfo
-                            businessInfo={businessInfo}
-                            handleBusinessInfoChange={this.handleBusinessInfoChange}
-                            nextStep={this.nextStep}
-                        />
-                    </div>
+                    <BusinessInfo
+                        businessInfo={businessInfo}
+                        handleBusinessInfoChange={this.handleBusinessInfoChange}
+                        nextStep={this.nextStep}
+                    />
                 );
             case 2:
                 return (

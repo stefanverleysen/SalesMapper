@@ -1,3 +1,4 @@
+/* Add styles for the entire app */
 .App {
   text-align: center;
 }
@@ -35,4 +36,31 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Add styles for draggable items */
+.draggable-item {
+  background-color: #f2f2f2;
+  padding: 8px;
+  margin: 0 0 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+/* Style the item when it's being dragged */
+.dragging {
+  background-color: #d9d9d9;
+  transform: scale(1.05);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Style the container for draggable items */
+.draggable-container {
+  max-width: 300px;
+}
+
+/* Add some spacing between items */
+.draggable-container .draggable-item + .draggable-item {
+  margin-top: 8px;
 }

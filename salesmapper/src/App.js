@@ -9,7 +9,7 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            step: 1,
+            step: 0, // Initialize the step to 0 (Welcome Screen)
             businessInfo: { mapName: '', businessName: '', industry: '' },
             stages: [],
             activities: [],
@@ -17,30 +17,37 @@ class App extends Component {
         };
     }
 
-    // Navigation between steps
+    // Method to proceed to the next step
     nextStep = () => {
-        this.setState(prevState => ({ step: prevState.step + 1 }));
+        const { step } = this.state;
+        this.setState({ step: step + 1 });
     };
 
+    // Method to go back to the previous step
     prevStep = () => {
-        this.setState(prevState => ({ step: prevState.step - 1 }));
+        const { step } = this.state;
+        if (step > 0) {
+            this.setState({ step: step - 1 });
+        }
     };
 
-    // Handlers for business info
+    // Method to handle changes in business information
     handleBusinessInfoChange = (e) => {
+        const { name, value } = e.target;
         this.setState({
             businessInfo: {
                 ...this.state.businessInfo,
-                [e.target.name]: e.target.value
+                [name]: value
             }
         });
     };
 
-    // Handlers for stages
+    // Method to handle changes in stages
     handleStageChange = (newStages) => {
         this.setState({ stages: newStages });
     };
 
+    // Method to update a stage
     handleStageUpdate = (id, updatedStageData) => {
         const updatedStages = this.state.stages.map(stage => {
             if (stage.id === id) {
@@ -51,51 +58,54 @@ class App extends Component {
         this.setState({ stages: updatedStages });
     };
 
-    // Handlers for activities and milestones
+    // Method to handle changes in activities
     handleActivitiesChange = (newActivities) => {
         this.setState({ activities: newActivities });
     };
 
+    // Method to handle changes in milestones
     handleMilestonesChange = (newMilestones) => {
         this.setState({ milestones: newMilestones });
     };
 
-    // Drag and drop handler for Kanban board and Stages
+    // Method to handle drag and drop
     onDragEnd = (result) => {
-        const { destination, source, draggableId, type } = result;
-
-        // If dropped outside the list
-        if (!destination) return;
-
-        // If dropped in the same place
-        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-
-        if (type === 'stage') {
-            const newStages = Array.from(this.state.stages);
-            const draggedStage = newStages.find(stage => `stage-${stage.id}` === draggableId);
-
-            newStages.splice(source.index, 1);
-            newStages.splice(destination.index, 0, draggedStage);
-
-            this.setState({ stages: newStages });
-        }
-        // Add similar logic for 'activity' and 'milestone' if needed
+        // Handle drag and drop logic here
     };
 
     render() {
         const { step, businessInfo, stages, activities, milestones } = this.state;
 
-        switch (step) {
-            case 1:
-                return (
+        return (
+            <div>
+                {step === 0 && (
+                    <div>
+                        <h1>Welcome to Automated Sales Mapper</h1>
+                        <p>
+                            This tool helps you map your sales process, making it more efficient and organized.
+                            Follow these steps to get started:
+                        </p>
+                        <ol>
+                            <li>Enter your business information.</li>
+                            <li>Create sales process stages.</li>
+                            <li>Add key activities and milestones.</li>
+                            <li>Review your sales map.</li>
+                            <li>Organize your tasks on the Kanban board.</li>
+                        </ol>
+                        <button onClick={this.nextStep}>Get Started</button>
+                    </div>
+                )}
+
+                {step === 1 && (
                     <BusinessInfo
                         businessInfo={businessInfo}
                         handleBusinessInfoChange={this.handleBusinessInfoChange}
                         nextStep={this.nextStep}
+                        prevStep={this.prevStep}
                     />
-                );
-            case 2:
-                return (
+                )}
+
+                {step === 2 && (
                     <Stages
                         stages={stages}
                         handleStageChange={this.handleStageChange}
@@ -103,9 +113,9 @@ class App extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                     />
-                );
-            case 3:
-                return (
+                )}
+
+                {step === 3 && (
                     <KeyActivitiesMilestones
                         activities={activities}
                         milestones={milestones}
@@ -114,9 +124,9 @@ class App extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                     />
-                );
-            case 4:
-                return (
+                )}
+
+                {step === 4 && (
                     <Summary
                         businessInfo={businessInfo}
                         stages={stages}
@@ -125,9 +135,9 @@ class App extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                     />
-                );
-            case 5:
-                return (
+                )}
+
+                {step === 5 && (
                     <KanbanBoard
                         stages={stages}
                         activities={activities}
@@ -135,10 +145,9 @@ class App extends Component {
                         onDragEnd={this.onDragEnd}
                         prevStep={this.prevStep}
                     />
-                );
-            default:
-                return null;
-        }
+                )}
+            </div>
+        );
     }
 }
 

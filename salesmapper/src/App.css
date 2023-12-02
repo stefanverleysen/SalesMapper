@@ -80,26 +80,35 @@
 /* Add styles for Kanban board */
 .kanban-board {
   display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  background-color: #f2f2f2;
+  flex-direction: row; /* Align children horizontally */
+  justify-content: flex-start; /* Align children to the start of the main axis */
+  align-items: flex-start; /* Align children to the start of the cross axis */
+  gap: 10px; /* Space between columns */
+  padding: 10px; /* Padding around the board */
+  overflow-x: auto; /* Enables horizontal scrolling */
+  min-height: 500px; /* Minimum height of the Kanban board */
 }
 
 .kanban-column {
-  flex: 1;
-  margin: 0 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  padding: 16px;
-  overflow-y: auto;
-  max-height: 80vh;
+  flex: 0 0 auto; /* Prevents columns from growing or shrinking */
+  width: 300px; /* Width of each column */
+  min-height: 480px; /* Minimum height of each column */
+  background-color: #f4f4f4; /* Background color of the column */
+  border: 1px solid #ddd; /* Border for the column */
+  border-radius: 4px; /* Rounded corners for the column */
+  padding: 10px; /* Padding inside the column */
+  overflow-y: auto; /* Enables vertical scrolling within each column */
 }
 
 .kanban-column h3 {
-  margin: 0 0 16px;
-  font-size: 20px;
-  color: #333;
+  font-size: 1.2em; /* Adjust the font size as needed */
+  color: #333; /* Text color for the header */
+  margin-bottom: 10px; /* Space below the header */
+  padding: 5px; /* Padding around the header */
+  background-color: #e9ecef; /* Background color of the header */
+  border-radius: 3px; /* Rounded corners for the header */
+  text-align: center; /* Center the text */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Shadow for the header */
 }
 
 .kanban-column-content {
@@ -107,13 +116,12 @@
 }
 
 .kanban-card {
-  background-color: #ffcc00;
-  padding: 8px;
-  margin: 0 0 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: grab;
-  transition: background-color 0.2s, transform 0.2s;
+  background-color: white; /* Background color of the card */
+  border: 1px solid #ccc; /* Border for the card */
+  border-radius: 3px; /* Rounded corners for the card */
+  padding: 8px; /* Padding inside the card */
+  margin-bottom: 8px; /* Space between cards */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Shadow for the card */
 }
 
 .kanban-card.activity {
@@ -123,4 +131,17 @@
 .kanban-card.milestone {
   background-color: #17a2b8; /* Blue color for milestones */
   color: white;
+}
+.kanban-stage-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; /* Adjust as needed */
+  align-items: start; /* Adjust as needed */
+  gap: 10px; /* Spacing between stages, adjust as needed */
+}
+
+.kanban-stage {
+  /* Additional styling for individual stages */
+  flex-grow: 1; /* Makes stages take up equal space */
+  /* Add more styling as needed */
 }

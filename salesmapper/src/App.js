@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import './App.css'; // Make sure to adjust the path if needed
+import bannerImage from './banner.png'; // Add the correct path to your banner image
+
 import BusinessInfo from './BusinessInfo';
 import Stages from './Stages';
 import KeyActivitiesMilestones from './KeyActivitiesMilestones';
@@ -9,7 +12,7 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            step: 0, // Initialize the step to 0 (Welcome Screen)
+            step: 1,
             businessInfo: { mapName: '', businessName: '', industry: '' },
             stages: [],
             activities: [],
@@ -17,37 +20,30 @@ class App extends Component {
         };
     }
 
-    // Method to proceed to the next step
+    // Navigation between steps
     nextStep = () => {
-        const { step } = this.state;
-        this.setState({ step: step + 1 });
+        this.setState(prevState => ({ step: prevState.step + 1 }));
     };
 
-    // Method to go back to the previous step
     prevStep = () => {
-        const { step } = this.state;
-        if (step > 0) {
-            this.setState({ step: step - 1 });
-        }
+        this.setState(prevState => ({ step: prevState.step - 1 }));
     };
 
-    // Method to handle changes in business information
+    // Handlers for business info
     handleBusinessInfoChange = (e) => {
-        const { name, value } = e.target;
         this.setState({
             businessInfo: {
                 ...this.state.businessInfo,
-                [name]: value
+                [e.target.name]: e.target.value
             }
         });
     };
 
-    // Method to handle changes in stages
+    // Handlers for stages
     handleStageChange = (newStages) => {
         this.setState({ stages: newStages });
     };
 
-    // Method to update a stage
     handleStageUpdate = (id, updatedStageData) => {
         const updatedStages = this.state.stages.map(stage => {
             if (stage.id === id) {
@@ -58,54 +54,65 @@ class App extends Component {
         this.setState({ stages: updatedStages });
     };
 
-    // Method to handle changes in activities
+    // Handlers for activities and milestones
     handleActivitiesChange = (newActivities) => {
         this.setState({ activities: newActivities });
     };
 
-    // Method to handle changes in milestones
     handleMilestonesChange = (newMilestones) => {
         this.setState({ milestones: newMilestones });
     };
 
-    // Method to handle drag and drop
+    // Drag and drop handler for Kanban board and Stages
     onDragEnd = (result) => {
-        // Handle drag and drop logic here
+        const { destination, source, draggableId, type } = result;
+
+        // If dropped outside the list
+        if (!destination) return;
+
+        // If dropped in the same place
+        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+
+        if (type === 'stage') {
+            const newStages = Array.from(this.state.stages);
+            const draggedStage = newStages.find(stage => `stage-${stage.id}` === draggableId);
+
+            newStages.splice(source.index, 1);
+            newStages.splice(destination.index, 0, draggedStage);
+
+            this.setState({ stages: newStages });
+        }
+        // Add similar logic for 'activity' and 'milestone' if needed
     };
 
     render() {
         const { step, businessInfo, stages, activities, milestones } = this.state;
 
-        return (
-            <div>
-                {step === 0 && (
-                    <div>
-                        <h1>Welcome to Automated Sales Mapper</h1>
-                        <p>
-                            This tool helps you map your sales process, making it more efficient and organized.
-                            Follow these steps to get started:
-                        </p>
-                        <ol>
-                            <li>Enter your business information.</li>
-                            <li>Create sales process stages.</li>
-                            <li>Add key activities and milestones.</li>
-                            <li>Review your sales map.</li>
-                            <li>Organize your tasks on the Kanban board.</li>
-                        </ol>
-                        <button onClick={this.nextStep}>Get Started</button>
+        switch (step) {
+            case 1:
+                return (
+                    <div className="App">
+                        <img src={bannerImage} alt="Banner" className="App-logo" />
+                        <div className="App-header">
+                            <h1>Welcome to Automated Sales Mapper</h1>
+                            <p>Follow these steps to map your sales process:</p>
+                            <ul>
+                                <li>Step 1: Provide business information.</li>
+                                <li>Step 2: Define sales process stages.</li>
+                                <li>Step 3: Add key activities and milestones.</li>
+                                <li>Step 4: Review your sales process.</li>
+                                <li>Step 5: Organize your sales process on the Kanban board.</li>
+                            </ul>
+                        </div>
+                        <BusinessInfo
+                            businessInfo={businessInfo}
+                            handleBusinessInfoChange={this.handleBusinessInfoChange}
+                            nextStep={this.nextStep}
+                        />
                     </div>
-                )}
-
-                {step === 1 && (
-                    <BusinessInfo
-                        businessInfo={businessInfo}
-                        handleBusinessInfoChange={this.handleBusinessInfoChange}
-                        nextStep={this.nextStep}
-                        prevStep={this.prevStep}
-                    />
-                )}
-
-                {step === 2 && (
+                );
+            case 2:
+                return (
                     <Stages
                         stages={stages}
                         handleStageChange={this.handleStageChange}
@@ -113,9 +120,9 @@ class App extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                     />
-                )}
-
-                {step === 3 && (
+                );
+            case 3:
+                return (
                     <KeyActivitiesMilestones
                         activities={activities}
                         milestones={milestones}
@@ -124,9 +131,9 @@ class App extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                     />
-                )}
-
-                {step === 4 && (
+                );
+            case 4:
+                return (
                     <Summary
                         businessInfo={businessInfo}
                         stages={stages}
@@ -135,9 +142,9 @@ class App extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                     />
-                )}
-
-                {step === 5 && (
+                );
+            case 5:
+                return (
                     <KanbanBoard
                         stages={stages}
                         activities={activities}
@@ -145,9 +152,10 @@ class App extends Component {
                         onDragEnd={this.onDragEnd}
                         prevStep={this.prevStep}
                     />
-                )}
-            </div>
-        );
+                );
+            default:
+                return null;
+        }
     }
 }
 

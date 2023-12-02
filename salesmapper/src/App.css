@@ -1,34 +1,41 @@
 /* Add styles for the entire app */
 .App {
   text-align: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #ffcc00;
+  color: #333;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  animation: App-logo-spin infinite 20s linear;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: none; /* Disable the spinning animation */
   }
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #333;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 24px;
+  color: #ffcc00;
+  padding: 20px;
 }
 
 .App-link {
-  color: #61dafb;
+  color: #ffcc00;
+  text-decoration: none;
 }
 
+/* Keyframes for the logo spinning animation */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -40,27 +47,32 @@
 
 /* Add styles for draggable items */
 .draggable-item {
-  background-color: #f2f2f2;
-  padding: 8px;
-  margin: 0 0 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background-color: #333;
+  padding: 12px;
+  margin: 0 0 12px;
+  border: 2px solid #ffcc00;
+  border-radius: 8px;
+  color: #ffcc00;
+  font-size: 16px;
   cursor: grab;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 /* Style the item when it's being dragged */
 .dragging {
-  background-color: #d9d9d9;
+  background-color: #ffcc00;
+  color: #333;
   transform: scale(1.05);
-  transition: background-color 0.2s, transform 0.2s;
 }
 
 /* Style the container for draggable items */
 .draggable-container {
-  max-width: 300px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 /* Add some spacing between items */
 .draggable-container .draggable-item + .draggable-item {
-  margin-top: 8px;
+  margin-top: 16px;
 }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import StageInput from './StageInput';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-
 const Stages = ({ stages, handleStageChange, handleStageUpdate, nextStep, prevStep }) => {
     const [newStage, setNewStage] = useState('');
 
@@ -31,16 +30,17 @@ const Stages = ({ stages, handleStageChange, handleStageUpdate, nextStep, prevSt
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div>
-                <h2>Sales Process Stages</h2>
-                <div>
+            <div className="container mt-4">
+                <h2 className="mb-3">Sales Process Stages</h2>
+                <div className="input-group mb-3">
                     <input 
                         type="text"
+                        className="form-control"
                         value={newStage}
                         onChange={(e) => setNewStage(e.target.value)}
                         placeholder="New Stage Name"
                     />
-                    <button onClick={addStage}>Add Stage</button>
+                    <button className="btn btn-outline-secondary" onClick={addStage}>Add Stage</button>
                 </div>
                 <Droppable droppableId="stages">
                     {(provided) => (
@@ -49,6 +49,7 @@ const Stages = ({ stages, handleStageChange, handleStageUpdate, nextStep, prevSt
                                 <Draggable key={stage.id} draggableId={`stage-${stage.id}`} index={index}>
                                     {(provided) => (
                                         <div 
+                                            className="mb-2"
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}>
@@ -65,9 +66,9 @@ const Stages = ({ stages, handleStageChange, handleStageUpdate, nextStep, prevSt
                         </div>
                     )}
                 </Droppable>
-                <div>
-                    <button onClick={prevStep}>Previous</button>
-                    <button onClick={nextStep}>Next</button>
+                <div className="d-flex justify-content-between mt-3">
+                    <button className="btn btn-secondary" onClick={prevStep}>Previous</button>
+                    <button className="btn btn-primary" onClick={nextStep}>Next</button>
                 </div>
             </div>
         </DragDropContext>

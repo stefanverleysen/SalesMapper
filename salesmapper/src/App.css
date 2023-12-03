@@ -145,3 +145,14 @@
   flex-grow: 1; /* Makes stages take up equal space */
   /* Add more styling as needed */
 }
+
+.footer {
+  position: absolute;
+  display: block;
+  color: black;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  line-height: 60px; /* Vertically center the text */
+  
+}

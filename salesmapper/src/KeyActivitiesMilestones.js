@@ -17,40 +17,42 @@ const KeyActivitiesMilestones = ({ activities, milestones, handleActivitiesChang
     };
 
     return (
-        <div>
-            <h2>Key Activities and Milestones</h2>
-            <div>
+        <div className="container mt-4">
+            <h2 className="mb-3">Key Activities and Milestones</h2>
+            <div className="input-group mb-3">
                 <input
                     type="text"
+                    className="form-control"
                     value={newActivity}
                     onChange={(e) => setNewActivity(e.target.value)}
                     placeholder="Add a new activity"
                 />
-                <button onClick={addActivity}>Add Activity</button>
+                <button className="btn btn-outline-secondary" onClick={addActivity}>Add Activity</button>
             </div>
-            <div>
+            <div className="input-group mb-3">
                 <input
                     type="text"
+                    className="form-control"
                     value={newMilestone}
                     onChange={(e) => setNewMilestone(e.target.value)}
                     placeholder="Add a new milestone"
                 />
-                <button onClick={addMilestone}>Add Milestone</button>
+                <button className="btn btn-outline-secondary" onClick={addMilestone}>Add Milestone</button>
             </div>
-            <div>
+            <div className="mb-3">
                 <h3>Current Activities</h3>
                 {activities.map(activity => <p key={activity.id}>{activity.name}</p>)}
             </div>
-            <div>
+            <div className="mb-3">
                 <h3>Current Milestones</h3>
                 {milestones.map(milestone => <p key={milestone.id}>{milestone.name}</p>)}
             </div>
-            <button onClick={prevStep}>Previous</button>
-            <button onClick={nextStep}>Next</button>
+            <div className="d-flex justify-content-between mt-3">
+                <button className="btn btn-secondary" onClick={prevStep}>Previous</button>
+                <button className="btn btn-primary" onClick={nextStep}>Next</button>
+            </div>
         </div>
     );
 };
 
 export default KeyActivitiesMilestones;
-
-
